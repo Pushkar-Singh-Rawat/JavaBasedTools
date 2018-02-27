@@ -59,7 +59,7 @@ public class AppUi {
 		listOfImages = new ArrayList<Object>();
 		createDoc=new CreateImageDocument();
 
-		JFrame frame = new JFrame("ScreenCap-By Pushkar");
+		JFrame frame = new JFrame("CapScreen - By Pushkar");
 		Image icon = Toolkit.getDefaultToolkit().getImage(System.getProperty("user.dir")+"\\application_resources\\images\\logo2.png");    
 		frame.setIconImage(icon);
 
@@ -124,20 +124,20 @@ public class AppUi {
 
 
 				String getFileName = fileName.getText();
-				if(!getFileName.equals("")){
+				if(!(getFileName.equals("")||(getFileName.equals("Enter file name")))){
 					file = new File(System.getProperty("user.dir")+"\\screenshots\\" + getFileName + ".docx");
 					file.getParentFile().mkdirs();
 					try {
 						if (file.exists()) {
 
-							errorLable.setIcon(new ImageIcon(System.getProperty("user.dir")+"application_resources\\images\\saveFailed.png"));
+							errorLable.setIcon(new ImageIcon(System.getProperty("user.dir")+"\\application_resources\\images\\saveFailed.png"));
 
 						}
 						if(!file.exists()){
 							snapButton.setEnabled(true);
 							stopButton.setEnabled(true);
 							startButton.setEnabled(false);
-							errorLable.setIcon(new ImageIcon(System.getProperty("user.dir")+"application_resources\\images\\saved.png"));
+							errorLable.setIcon(new ImageIcon(System.getProperty("user.dir")+"\\application_resources\\images\\saved.png"));
 						}
 
 						if (file.createNewFile()) {
@@ -149,6 +149,9 @@ public class AppUi {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+				}else{
+					errorLable.setIcon(new ImageIcon(System.getProperty("user.dir")+"\\application_resources\\images\\saveFailed.png"));
+
 				}
 
 			}
