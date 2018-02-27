@@ -30,7 +30,6 @@ public class ImageList {
 
 	public ArrayList<Object> getImagesList() {
 		try {
-
 			i++;
 			Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 			BufferedImage screenFullImage = robot.createScreenCapture(screenRect);
