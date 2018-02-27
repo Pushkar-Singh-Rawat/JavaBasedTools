@@ -1,6 +1,9 @@
 package com.screencap.ui;
 
 import javax.swing.UIManager.*;
+import com.screencap.utils.CreateImageDocument;
+import com.screencap.utils.ImageList;
+
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -31,6 +34,13 @@ public class AppUi {
 	JLabel devLabel1;
 	JLabel devLabel2;
 	JLabel devLabel3;
+	ArrayList<Object> listOfImages;
+	CreateImageDocument createDoc;
+	static int size;
+	static File file;
+	ImageList imageList;
+	static boolean upflag = false;
+
 
 	public AppUi() {
 		UIManager.put("nimbusBase", new Color(255,255,255));
@@ -46,6 +56,8 @@ public class AppUi {
 		} catch (Exception e) {
 			// If Nimbus is not available, you can set the GUI to another look and feel.
 		}
+		listOfImages = new ArrayList<Object>();
+		createDoc=new CreateImageDocument();
 
 		JFrame frame = new JFrame("ScreenCap-By Pushkar");
 		Image icon = Toolkit.getDefaultToolkit().getImage(System.getProperty("user.dir")+"\\application_resources\\images\\logo2.png");    
@@ -58,6 +70,13 @@ public class AppUi {
 		devLabel1=new JLabel(new ImageIcon(System.getProperty("user.dir")+"\\application_resources\\images\\devCont.png"));
 		errorLable = new JLabel();
 		fileName = new JTextField("Enter file name");
+		fileName.setFocusable(true);
+		if (upflag == false) {
+			snapButton.setEnabled(false);
+			stopButton.setEnabled(false);
+		} else {
+
+		}
 		fileName.setForeground(new Color(153,153,153));
 		fileName.addFocusListener(new FocusListener() {
 
@@ -77,8 +96,8 @@ public class AppUi {
 		snapButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-
-
+				listOfImages=imageList.getImagesList();
+				System.out.println("jbutton class:listOfImages size"+listOfImages.size());
 
 			}
 		});
@@ -87,6 +106,12 @@ public class AppUi {
 
 			public void actionPerformed(ActionEvent e) {
 
+				if (!listOfImages.isEmpty()) {
+					createDoc.createDocumentOfImages(listOfImages,fileName.getText());
+				} else {
+					System.out.println("arraylist is empty");
+					System.exit(0);
+				}
 
 			}
 		});
@@ -94,7 +119,37 @@ public class AppUi {
 		startButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				imageList=new ImageList();
+				upflag = true;
 
+
+				String getFileName = fileName.getText();
+				if(!getFileName.equals("")){
+					file = new File(System.getProperty("user.dir")+"\\screenshots\\" + getFileName + ".docx");
+					file.getParentFile().mkdirs();
+					try {
+						if (file.exists()) {
+
+							errorLable.setIcon(new ImageIcon(System.getProperty("user.dir")+"application_resources\\images\\saveFailed.png"));
+
+						}
+						if(!file.exists()){
+							snapButton.setEnabled(true);
+							stopButton.setEnabled(true);
+							startButton.setEnabled(false);
+							errorLable.setIcon(new ImageIcon(System.getProperty("user.dir")+"application_resources\\images\\saved.png"));
+						}
+
+						if (file.createNewFile()) {
+							System.out.println(file.getAbsolutePath());
+						} else {
+							System.out.println("try again!!!");
+						}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
 
 			}
 		});
